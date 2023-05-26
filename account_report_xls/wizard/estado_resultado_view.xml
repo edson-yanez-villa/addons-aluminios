@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+Copyright (C) 2015 DevIntelle Consulting Service Pvt.Ltd (<http://www.devintellecs.com>).
+
+For Module Support : devintelle@gmail.com  or Skype : devintelle
+ -->
+<odoo>
+    <record id="view_dev_estado_resultado" model="ir.ui.view">
+        <field name="name">view.dev.estado.resultado</field>
+        <field name="model">estado.resultado</field>
+        <field name="arch" type="xml">
+            <form string="Reporte Mensual">
+                <group>
+                    <group>
+                        <field name="start_date"/>
+                        <field name="end_date"/>
+                    </group>
+                    <group>
+                        <field name="company_id"/>
+                        <field name="analytic_account_id" options="{'no_create': True}"/>
+                    </group>
+                </group>
+                <sheet>
+                    <strong>Cuentas por defecto</strong>
+                    <field name="default_Boolean"/>
+                    <group string="Cuentas contables">
+                        
+                        <field name="account_ids" options="{'no_create': True}" nolabel="1"
+                               domain="[('company_id', '=', company_id)]"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="open_table" string="Generar Informe" type="object" class="oe_highlight"/>
+                    o
+                    <button string="Cancel" class="oe_link" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+    <record id="action_estado_resultado" model="ir.actions.act_window">
+        <field name="name">Estado Resultado</field>
+        <field name="res_model">estado.resultado</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">form</field>
+        <field name="view_id" ref="view_dev_estado_resultado"/>
+        <field name="target">new</field>
+    </record>
+
+    <menuitem id="menu_estado_resultado" name="Reporte Financiero Meses" parent="account.menu_finance_reports"
+              sequence="1" action="action_estado_resultado"/>
+</odoo>
