@@ -21,12 +21,12 @@ For Module Support : devintelle@gmail.com  or Skype : devintelle
                     </group>
                 </group>
                 <sheet>
-                    <strong>Cuentas por defecto</strong>
-                    <field name="default_Boolean"/>
+                    <!-- <strong>Cuentas por defecto</strong>
+                    <field name="default_Boolean"/> -->
                     <group string="Cuentas contables">
                         
                         <field name="account_ids" options="{'no_create': True}" nolabel="1"
-                               domain="[('company_id', '=', company_id)]"/>
+                               domain="[('company_id', '=', company_id),('user_type_id.name', 'in', ['Ingreso', 'Gastos', 'Coste directo de la ventas'])]"/>
                     </group>
                 </sheet>
                 <footer>
