@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <template id="external_layout_footer" inherit_id="report.external_layout_footer">
+            <xpath expr="//div/div[1]" position="before">
+                <div t-if="'date_order' in o.fields_get() and o.state in ['draft', 'sent']" class="row">
+                    <div class="col-xs-12">
+                        <p>Cotización válida por 7 días</p>
+                    </div>
+                </div>
+            </xpath>
+        </template>
+
+    </data>
+</odoo>
