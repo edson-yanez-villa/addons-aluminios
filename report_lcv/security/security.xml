@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="0">
+        <record model="res.groups" id="group_sale_price_unit">
+            <field name="name">Editar Precio Unitario en Ventas</field>
+            <field name="implied_ids" eval="[(4, ref('base.group_multi_company'))]"/>
+        </record>
+    </data>
+</odoo>

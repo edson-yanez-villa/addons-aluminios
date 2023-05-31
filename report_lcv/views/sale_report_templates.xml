@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_saleorder_document" inherit_id="sale.report_saleorder_document">
+        <xpath expr="//tbody[@class='sale_tbody']" position="replace">
+            <tbody class="sale_tbody">
+                <t t-foreach="page" t-as="layout_category">
+
+                    <t t-if="layout_category_size > 1 or page_size > 1" groups="sale.group_sale_layout">
+                        <tr class="active">
+                            <td colspan="7" style="font-weight: bold; border-bottom: 1px solid black;">&amp;bull;
+                                <t t-esc="layout_category['name']"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                    <t t-foreach="layout_category['lines']" t-as="l">
+                        <tr>
+                            <td>
+                                <span t-field="l.name"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-field="l.product_uom_qty"/>
+                                <span t-field="l.product_uom" groups="product.group_uom"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="'{0:,.2f}'.format(l.price_unit)"/>
+                            </td>
+                            <td t-if="display_discount" class="text-right" groups="sale.group_discount_per_so_line">
+                                <span t-esc="'{0:,.2f}'.format(l.discount)"/>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="', '.join(map(lambda x: (x.description or x.name), l.tax_id))"/>
+                            </td>
+                            <td class="text-right" groups="sale.group_show_price_subtotal">
+                                <!--<span t-field="l.price_subtotal"
+                                      t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                                <span t-esc="'{0:,.2f}'.format(l.price_subtotal)"/><span t-field="doc.pricelist_id.currency_id.symbol"/>
+                            </td>
+                            <td class="text-right" groups="sale.group_show_price_total">
+                                <!--<span t-field="l.price_total"
+                                      t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                                <span t-esc="'{0:,.2f}'.format(l.price_total)"/><span t-field="doc.pricelist_id.currency_id.symbol"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                    <t t-if="(layout_category_size > 1 or page_size > 1) and layout_category['subtotal']"
+                       groups="sale.group_sale_layout">
+                        <tr class="text-right">
+                            <td colspan="6">
+                                <strong>Subtotal:</strong>
+                                <t t-set="subtotal"
+                                   t-value="sum(line.price_subtotal for line in layout_category['lines'])"/>
+                                <span t-esc="subtotal"
+                                      t-options="{'widget': 'monetary', 'display_currency': doc.pricelist_id.currency_id}"/>
+                            </td>
+                        </tr>
+                    </t>
+
+                </t>
+            </tbody>
+        </xpath>
+        <xpath expr="//div[@name='total']" position="replace">
+            <div class="row" name="total">
+                <div class="col-xs-4 pull-right">
+                    <table class="table table-condensed">
+                        <tr class="border-black">
+                            <td>
+                                <strong>Total sin impuestos</strong>
+                            </td>
+                            <td class="text-right">
+                                <span t-esc="'{0:,.2f}'.format(doc.amount_untaxed)"/>
+                                <span t-field="doc.pricelist_id.currency_id.symbol"/>
+                                <!--<span t-field="doc.amount_untaxed"
+                                      t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                            </td>
+                        </tr>
+                        <t t-foreach="doc._get_tax_amount_by_group()" t-as="amount_by_group">
+                            <tr>
+                                <td>
+                                    <span t-esc="amount_by_group[0] or 'Taxes'"/>
+                                </td>
+                                <td class="text-right">
+                                    <!--
+                                    <span t-esc="amount_by_group[1]"
+                                          t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>
+                                          -->
+                                    <span t-esc="'{0:,.2f}'.format(amount_by_group[1])"/>
+                                    <span t-field="doc.pricelist_id.currency_id.symbol"/>
+                                </td>
+                            </tr>
+                        </t>
+                        <tr class="border-black">
+                            <td>
+                                <strong>Total</strong>
+                            </td>
+                            <td class="text-right">
+                                <!--<span t-field="doc.amount_total"
+                                      t-options='{"widget": "monetary", "display_currency": doc.pricelist_id.currency_id}'/>-->
+                                <span t-esc="'{0:,.2f}'.format(doc.amount_total)"/>
+                                <span t-field="doc.pricelist_id.currency_id.symbol"/>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        </xpath>
+    </template>
+
+    <template id="external_layout_footer" inherit_id="report.external_layout_footer">
+        <xpath expr="//div/div[1]" position="before">
+            <div t-if="'date_order' in o.fields_get() and o.state in ['draft', 'sent']" class="row">
+                <div class="col-xs-12">
+                    <p>Cotización válida por 7 días</p>
+                </div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
