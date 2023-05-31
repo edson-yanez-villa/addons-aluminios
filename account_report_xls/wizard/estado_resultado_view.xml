@@ -10,28 +10,28 @@ For Module Support : devintelle@gmail.com  or Skype : devintelle
         <field name="model">estado.resultado</field>
         <field name="arch" type="xml">
             <form string="Reporte Mensual">
-                <group>
+                <header>
                     <group>
-                        <field name="start_date"/>
-                        <field name="end_date"/>
+                        <group>
+                            <field name="start_date"/>
+                            <field name="end_date"/>
+                        </group>
+                        <group>
+                            <field name="company_id"/>
+                            <field name="analytic_account_id" options="{'no_create': True}"/>
+                        </group>
                     </group>
                     <group>
-                        <field name="company_id"/>
-                        <field name="analytic_account_id" options="{'no_create': True}"/>
+                        <button name="get_default_accounts" string="Cuentas por defecto" type="object" class="oe_highlight"/>
                     </group>
-                </group>
+                </header>
                 <sheet>
-                    <!-- <strong>Cuentas por defecto</strong>
-                    <field name="default_Boolean"/> -->
                     <group string="Cuentas contables">
-                        
-                        <field name="account_ids" options="{'no_create': True}" nolabel="1"
-                               domain="[('company_id', '=', company_id),('user_type_id.name', 'in', ['Ingreso', 'Gastos', 'Coste directo de la ventas'])]"/>
+                        <field name="account_ids" options="{'no_create': True}" nolabel="1" domain="[('company_id', '=', company_id)]"/>
                     </group>
                 </sheet>
                 <footer>
                     <button name="open_table" string="Generar Informe" type="object" class="oe_highlight"/>
-                    o
                     <button string="Cancel" class="oe_link" special="cancel"/>
                 </footer>
             </form>

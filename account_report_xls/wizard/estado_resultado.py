@@ -37,7 +37,7 @@ class EstadoResultado(models.TransientModel):
     excel_file = fields.Binary('Excel File')
     default_Boolean=fields.Boolean(string="Cuentas por defecto")
 
-    # @api.multi
+    @api.multi
     def open_table(self):
         context_report = {}
         domain_report = []
@@ -62,37 +62,14 @@ class EstadoResultado(models.TransientModel):
             'domain': domain_report,
         }
 
-    @api.onchange('default_Boolean')
-    def get_accounts_default1(self):
+    @api.multi
+    def get_default_accounts(self):
         for record in self:
-            if record.default_Boolean:
-                account_ids = self.env['account.account'].search([
-                    ("company_id", "=" , self.company_id.id),
-                    ("user_type_id.name", "in", ['Ingreso', 'Gastos', 'Coste directo de la ventas'])
-                    ]).ids
-                for account_id in account_ids:
-                    record.account_ids = [(4, account_id)] 
-                # record.account_ids = [(0, 0,  {
-                #     'code': account_ids.code,
-                #     'name': account_ids.name,
-                #     'user_type_id': account_ids.user_type_id.id,
-                #     'company_id': account_ids.company_id.id,
-                #     'currency_id': account_ids.currency_id.id
-                # })]
-
-        # if self.default_Boolean:
-        #     self.account_ids=self.env['account.account'].search([
-        #         '&',
-        #         ("company_id","=",self.company_id.id),
-        #         '|',
-        #         ("user_type_id.name","=","Ingreso"),
-        #         '|',
-        #         ("user_type_id.name","=","Gastos"),
-        #         ("user_type_id.name","=","Coste directo de la ventas")
-        #     ])
-            # data = self.get_acount_ids()
-            # data = map(lambda row:row[0], data)
-            # self.account_ids = self.env['account.account'].browse(data).filtered(lambda x: x.user_type_id.name in ['Ingreso', 'Gastos', 'Coste directo de la ventas'])
-        #    self.account_ids=obj.filtered(lambda x:x.company_id==self.company_id.id)
-
-           
+            account_ids = self.env['account.account'].search([
+                ("company_id", "=" , self.company_id.id),
+                ("user_type_id.name", "in", ['Ingreso', 'Gastos', 'Coste directo de la ventas'])
+                ]).ids
+            record.account_ids = [(6, 0, account_ids)]
+        return {
+            "type": "ir.actions.do_nothing",
+        }
