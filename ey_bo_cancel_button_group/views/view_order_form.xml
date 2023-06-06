@@ -6,7 +6,7 @@
         <field name="inherit_id" ref="sale_discount_total_edited.discount_sale_view_form" />
         <field name="arch" type="xml">
             <xpath expr="//button[@name='action_cancel']" position="before">
-                <filter name="can_cancel" invisible="1" />
+                <field name="can_cancel" invisible="1" />
             </xpath>
             <xpath expr="//button[@name='action_cancel']" position="attributes">
                 <attribute name="states"/>
