@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="invoice_supplier_user_cancel_form_inherit" model="ir.ui.view">
+        <field name="name">invoice_supplier_user_cancel_form_inherit</field>
+        <field name="model">account.invoice</field>
+        <field name="inherit_id" ref="account.invoice_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_invoice_cancel']" position="before">
+                <field name="user_can_cancel" invisible="1"/>
+            </xpath>
+            <xpath expr="//button[@name='action_invoice_cancel']" position="attributes">
+                <attribute name="states"/>
+                <attribute name="attrs">{'invisible': [('user_can_cancel' ,'=', False)]}</attribute>
+            </xpath>
+        </field>
+    </record>
+</odoo>
