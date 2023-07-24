@@ -1,4 +1,6 @@
 from odoo import fields, models, api
+from odoo.exceptions import UserError, ValidationError
+
 
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
@@ -13,4 +15,18 @@ class SaleOrder(models.Model):
                 record.can_cancel = self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_button')
             else:
                 record.can_cancel = record.state in ['sale', 'draft', 'sent'] and len(pickings) == 0
+
+    @api.model
+    def create(self, vals):
+        if self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_button'):
+            return super(SaleOrder, self).create(vals)
+        else:
+            raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
+
+    @api.multi
+    def write(self, vals):
+        if self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_button'):
+            return super(SaleOrder, self).write(vals)
+        else:
+            raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
     

@@ -11,7 +11,8 @@
         'base',
         'sale',
         'account',
-        'account_cancel'
+        'account_cancel',
+        'product'
     ],
     'data': [
         'security/security.xml',
