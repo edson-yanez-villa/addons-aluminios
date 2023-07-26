@@ -18,14 +18,14 @@ class AccountInvoice(models.Model):
 
     @api.model
     def create(self, vals):
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_button'):
+        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_edit_button_invoice'):
             return super(AccountInvoice, self).create(vals)
         else:
             raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
 
     @api.multi
     def write(self, vals):
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_button'):
+        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_edit_button_invoice'):
             return super(AccountInvoice, self).write(vals)
         else:
             raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
