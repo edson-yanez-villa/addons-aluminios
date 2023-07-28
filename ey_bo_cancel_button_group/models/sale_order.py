@@ -13,6 +13,14 @@ class SaleOrder(models.Model):
         if self.env.user.has_group('ey_bo_cancel_button_group.group_create_button_sale'):
             context['come_create_order'] = True
         return super(SaleOrder, self.with_context(context)).print_quotation()
+    
+    @api.multi
+    def action_confirm(self):
+        context = dict(self.env.context)
+        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_button_sale'):
+            context['come_create_order'] = True
+        return super(SaleOrder, self.with_context(context)).action_confirm()
+    
     def _can_cancel_button(self):
         for record in self:
             pickings = record.picking_ids.filtered(lambda picking: picking.state == 'done' )

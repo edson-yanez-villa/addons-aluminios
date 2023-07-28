@@ -10,6 +10,7 @@
     'depends': [
         'base',
         'sale',
+        'sale_discount_total_edited',
         'account',
         'account_cancel',
         'product'
