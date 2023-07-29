@@ -7,20 +7,6 @@ class SaleOrder(models.Model):
 
     can_cancel = fields.Boolean('Puede cancelar', compute='_can_cancel_button')
     
-    @api.multi
-    def print_quotation(self):
-        context = dict(self.env.context)
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_button_sale'):
-            context['come_create_order'] = True
-        return super(SaleOrder, self.with_context(context)).print_quotation()
-    
-    @api.multi
-    def action_confirm(self):
-        context = dict(self.env.context)
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_button_sale'):
-            context['come_create_order'] = True
-        return super(SaleOrder, self.with_context(context)).action_confirm()
-    
     def _can_cancel_button(self):
         for record in self:
             pickings = record.picking_ids.filtered(lambda picking: picking.state == 'done' )
@@ -30,23 +16,20 @@ class SaleOrder(models.Model):
             else:
                 record.can_cancel = record.state in ['sale', 'draft', 'sent'] and len(pickings) == 0
 
-    @api.model
-    def create(self, vals):
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_button_sale'):
-            context = dict(self.env.context)
-            context['come_create_order'] = True
-            return super(SaleOrder, self.with_context(context)).create(vals)
-        else:
-            raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
+    @api.multi
+    def action_sale_ok(self):
+        context = dict(self.env.context)
+        context['come_sale'] = True
+        return super(SaleOrder, self.with_context(context)).action_sale_ok()
 
     @api.multi
     def write(self, vals):
         context = dict(self.env.context)
-        come_create_order = context.get('come_create_order', False)
-        if come_create_order or self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_edit_button_sale'):
-            if come_create_order:
-                context.pop('come_create_order')
-            return super(SaleOrder, self.with_context(context)).write(vals)
-        else:
+        come_sale = context.get('come_sale', False)
+        if not come_sale and not self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_edit_button_sale') and self.state in ['sale']:
             raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
+        else:
+            if come_sale:
+                context.pop('come_sale')
+            return super(SaleOrder, self.with_context(context)).write(vals)
     

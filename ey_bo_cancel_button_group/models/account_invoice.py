@@ -10,23 +10,27 @@ class AccountInvoice(models.Model):
     def _can_cancel_button(self):
         for record in self:
             if record.state == 'open':
-                record.user_can_cancel = self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_button')
+                record.user_can_cancel = self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_edit_button_invoice')
             elif record.state in ['draft', 'proforma2']:
                 record.user_can_cancel = True
             else:
                 record.user_can_cancel = False
 
     @api.model
-    def create(self, vals):
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_edit_button_invoice'):
-            return super(AccountInvoice, self).create(vals)
-        else:
-            raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
+    def get_count_as(self):
+        context = dict(self.env.context)
+        context['come_sale'] = True
+        return super(AccountInvoice, self.with_context(context)).get_count_as()
 
     @api.multi
     def write(self, vals):
-        if self.env.user.has_group('ey_bo_cancel_button_group.group_create_edit_button_invoice'):
-            return super(AccountInvoice, self).write(vals)
-        else:
+        write_invoice = not self.env.user.has_group('ey_bo_cancel_button_group.group_cancel_edit_button_invoice') and self.state in ['paid']
+        order = self.env['sale.order'].search([('name', '=', self.origin)])
+        has_origin_sale = self.origin and (order.state in ['sale'] if order else False)
+        context = dict(self.env.context)
+        come_sale = context.get('come_sale', False)
+        if not come_sale and has_origin_sale or write_invoice:
             raise UserError('Usted no tiene los permisos necesarios para realizar esta accion')
+        else:
+            return super(AccountInvoice, self).write(vals)
                 

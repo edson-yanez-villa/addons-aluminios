@@ -10,10 +10,11 @@
     'depends': [
         'base',
         'sale',
-        'sale_discount_total_edited',
+        'dev_customer_credit_limit',
         'account',
         'account_cancel',
-        'product'
+        'product',
+        'tax_invoice_report'
     ],
     'data': [
         'security/security.xml',

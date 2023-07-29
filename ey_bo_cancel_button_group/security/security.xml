@@ -2,16 +2,10 @@
 <odoo>
     <data noupdate="0">
         <record model="res.groups" id="group_cancel_edit_button_sale">
-            <field name="name">Puede Editar y Cancelar Cotizaciones</field>
-        </record>
-        <record model="res.groups" id="group_create_button_sale">
-            <field name="name">Puede Crear Cotizaciones</field>
+            <field name="name">Puede Editar y Cancelar Ventas</field>
         </record>
         <record model="res.groups" id="group_cancel_edit_button_invoice">
-            <field name="name">Puede Cancelar Facturas</field>
-        </record>
-        <record model="res.groups" id="group_create_edit_button_invoice">
-            <field name="name">Puede Crear y Editar Facturas</field>
+            <field name="name">Puede Editar y Cancelar Facturas</field>
         </record>
     </data>
 </odoo>
