@@ -21,6 +21,12 @@ class AccountInvoice(models.Model):
         context = dict(self.env.context)
         context['come_sale'] = True
         return super(AccountInvoice, self.with_context(context)).get_count_as()
+    
+    @api.multi
+    def action_invoice_open(self):
+        context = dict(self.env.context)
+        context['come_sale'] = self.origin and self.state in ['draft']
+        return super(AccountInvoice, self.with_context(context)).action_invoice_open()
 
     @api.multi
     def write(self, vals):
