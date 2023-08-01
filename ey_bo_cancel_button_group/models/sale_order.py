@@ -21,6 +21,8 @@ class SaleOrder(models.Model):
         context = dict(self.env.context)
         context['come_sale'] = True
         return super(SaleOrder, self.with_context(context)).action_sale_ok()
+    
+
 
     @api.multi
     def write(self, vals):
