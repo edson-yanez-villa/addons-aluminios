@@ -14,10 +14,12 @@
         'account',
         'account_cancel',
         'product',
-        'tax_invoice_report'
+        'tax_invoice_report',
+        'stock'
     ],
     'data': [
         'security/security.xml',
+        'security/ir.model.access.csv',
         'views/view_order_form.xml',
         'views/account_invoice_view.xml'
     ],
