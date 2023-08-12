@@ -21,7 +21,8 @@
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/view_order_form.xml',
-        'views/account_invoice_view.xml'
+        'views/account_invoice_view.xml',
+        'views/res_users_view.xml'
     ],
     'auto_install': False,
     'application': False,
