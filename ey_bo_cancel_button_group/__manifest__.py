@@ -12,17 +12,12 @@
         'sale',
         'dev_customer_credit_limit',
         'account',
-        'account_cancel',
-        'product',
-        'tax_invoice_report',
-        'stock'
     ],
     'data': [
         'security/security.xml',
         'security/ir.model.access.csv',
         'views/view_order_form.xml',
         'views/account_invoice_view.xml',
-        'views/res_users_view.xml'
     ],
     'auto_install': False,
     'application': False,
